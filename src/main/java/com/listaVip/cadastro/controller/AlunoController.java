@@ -1,20 +1,20 @@
 package com.listaVip.cadastro.controller;
-import com.listaVip.cadastro.model.Pessoa;
-import com.listaVip.cadastro.repository.PessoaRepository;
+import com.listaVip.cadastro.model.Aluno;
+import com.listaVip.cadastro.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pessoas")
-public class PessoaController {
+public class AlunoController {
 
     @Autowired
-    private PessoaRepository pessoaRepository;
+    private AlunoRepository pessoaRepository;
 
     @PostMapping
-    public ResponseEntity<Pessoa> cadastrar(@RequestBody Pessoa pessoa) {
-        Pessoa salva = pessoaRepository.save(pessoa);
+    public ResponseEntity<Aluno> cadastrar(@RequestBody Aluno pessoa) {
+        Aluno salva = pessoaRepository.save(pessoa);
         return ResponseEntity.ok(salva);
     }
 

@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Pessoa {
+public class Aluno {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,7 +14,7 @@ public class Pessoa {
     private String sobrenome;
     private String curso;
     private String telefone;
-    public Pessoa (){}
+    public Aluno(){}
     public String getSobrenome() {
         return sobrenome;
     }
