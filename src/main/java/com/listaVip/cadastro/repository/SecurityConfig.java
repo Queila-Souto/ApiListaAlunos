@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/usuarios/login", //url que usaremos para fazer login
+            "/usuario/login", //url que usaremos para fazer login
             "/usuario", //url que usaremos para criar um usuário
     };
     // Endpoints que requerem autenticação para serem acessados
