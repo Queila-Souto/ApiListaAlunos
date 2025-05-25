@@ -9,10 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public class AuthUserController {
     @RestController
     @RequestMapping("/usuario")
-    public class UserController {
+    public class AuthUserController {
 
         @Autowired
         private UsuarioService userService;
@@ -44,4 +43,4 @@ public class AuthUserController {
             return new ResponseEntity<>("Administrador autenticado com sucesso", HttpStatus.OK);
         }
     }
-}
+
