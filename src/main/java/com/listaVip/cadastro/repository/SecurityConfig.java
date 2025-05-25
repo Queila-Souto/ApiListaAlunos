@@ -4,6 +4,7 @@ import jakarta.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -17,17 +18,19 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@ComponentScan(basePackages = "com.listaVip.cadastro")
 @EnableWebSecurity
 public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/usuario/login", //url que usaremos para fazer login
-            "/usuario", //url que usaremos para criar um usuário
+            "/usuario/login" //url que usaremos para fazer login
+             //url que usaremos para criar um usuário
     };
     // Endpoints que requerem autenticação para serem acessados
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/test"
+            "/alunos",
+            "/usuario"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
@@ -41,30 +44,16 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        UserAuthFilter userAuthFilter = new UserAuthFilter();
-
-        // Adicionando log para endpoints sem autenticação
-        logger.info("Configurando endpoints sem autenticação:");
-        for (String endpoint : ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED) {
-            logger.info("Endpoint sem autenticação configurado: {}", endpoint);
-        }
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthFilter userAuthFilter) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
-                    try {
-                        auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                                .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                                .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
-                                .anyRequest().denyAll();
-                        logger.info("Configuração de segurança aplicada com sucesso");
-                    } catch (Exception e) {
-                        logger.error("Erro ao configurar endpoints: {}", e.getMessage());
-                        throw e;
-                    }
+                    auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
+                            .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
+                            .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
+                            .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
+                            .anyRequest().denyAll();
                 })
                 .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
