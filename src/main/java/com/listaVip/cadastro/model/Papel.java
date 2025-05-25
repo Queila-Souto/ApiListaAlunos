@@ -1,8 +1,16 @@
 package com.listaVip.cadastro.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-    @Entity
+@Entity
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
     public class Papel {
 
         public Papeis getNome() {
