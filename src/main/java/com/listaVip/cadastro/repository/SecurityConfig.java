@@ -24,23 +24,22 @@ public class SecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/usuario/login" //url que usaremos para fazer login
-             //url que usaremos para criar um usuário
+            "/usuario/login", //url que usaremos para fazer login
+            "/usuario"  //url que usaremos para criar um usuário
     };
     // Endpoints que requerem autenticação para serem acessados
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/alunos",
-            "/usuario"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
     public static final String[] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
+
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de administrador
     public static final String[] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+
     };
 
     @Bean
