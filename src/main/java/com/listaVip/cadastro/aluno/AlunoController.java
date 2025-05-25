@@ -1,6 +1,6 @@
-package com.listaVip.cadastro.controller;
-import com.listaVip.cadastro.model.Aluno;
-import com.listaVip.cadastro.repository.AlunoRepository;
+package com.listaVip.cadastro.aluno;
+
+import com.listaVip.cadastro.aluno.entity.Aluno;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

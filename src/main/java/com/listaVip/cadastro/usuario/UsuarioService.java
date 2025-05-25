@@ -1,15 +1,17 @@
-package com.listaVip.cadastro.service;
+package com.listaVip.cadastro.usuario;
 
-import com.listaVip.cadastro.model.*;
-import com.listaVip.cadastro.repository.JWTTokenService;
-import com.listaVip.cadastro.repository.SecurityConfig;
-import com.listaVip.cadastro.repository.UserDetailsImpl;
-import com.listaVip.cadastro.repository.UsuarioRepository;
+import com.listaVip.cadastro.auth.JWTTokenService;
+import com.listaVip.cadastro.usuario.dto.CriarUsuariosDto;
+import com.listaVip.cadastro.auth.dto.LoginUsuariosDto;
+import com.listaVip.cadastro.auth.dto.RecuperarJwtTokenDto;
+import com.listaVip.cadastro.usuario.entity.Papel;
+import com.listaVip.cadastro.usuario.entity.Usuario;
+import com.listaVip.cadastro.auth.config.SecurityConfig;
+import com.listaVip.cadastro.auth.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

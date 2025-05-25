@@ -1,11 +1,10 @@
-package com.listaVip.cadastro.repository;
+package com.listaVip.cadastro.auth;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -27,7 +26,7 @@ public class JWTTokenService {
                     .withExpiresAt(expirationDate()) // Define a data de expiração do token
                     .withSubject(user.getUsername()) // Define o assunto do token (neste caso, o nome de usuário)
                     .sign(algorithm); // Assina o token usando o algoritmo especificado
-        } catch (JWTCreationException exception){
+        } catch (JWTCreationException exception) {
             throw new JWTCreationException("Erro ao gerar token.", exception);
         }
     }
@@ -41,7 +40,7 @@ public class JWTTokenService {
                     .build()
                     .verify(token) // Verifica a validade do token
                     .getSubject(); // Obtém o assunto (neste caso, o nome de usuário) do token
-        } catch (JWTVerificationException exception){
+        } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("Token inválido ou expirado.");
         }
     }

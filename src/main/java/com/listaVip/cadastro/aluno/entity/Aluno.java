@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.model;
+package com.listaVip.cadastro.aluno.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

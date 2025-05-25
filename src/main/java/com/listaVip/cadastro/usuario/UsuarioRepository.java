@@ -1,6 +1,6 @@
-package com.listaVip.cadastro.repository;
+package com.listaVip.cadastro.usuario;
 
-import com.listaVip.cadastro.model.Usuario;
+import com.listaVip.cadastro.usuario.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

@@ -1,6 +1,7 @@
-package com.listaVip.cadastro.repository;
+package com.listaVip.cadastro.auth;
 
-import com.listaVip.cadastro.model.Usuario;
+import com.listaVip.cadastro.usuario.entity.Usuario;
+import com.listaVip.cadastro.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

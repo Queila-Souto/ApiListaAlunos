@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.model;
+package com.listaVip.cadastro.auth.dto;
 
 public record LoginUsuariosDto(
 

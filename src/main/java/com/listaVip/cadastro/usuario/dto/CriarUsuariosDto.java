@@ -1,4 +1,6 @@
-package com.listaVip.cadastro.model;
+package com.listaVip.cadastro.usuario.dto;
+
+import com.listaVip.cadastro.usuario.entity.Papeis;
 
 public record CriarUsuariosDto(
 

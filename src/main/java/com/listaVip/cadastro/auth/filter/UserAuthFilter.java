@@ -1,6 +1,10 @@
-package com.listaVip.cadastro.repository;
+package com.listaVip.cadastro.auth.filter;
 
-import com.listaVip.cadastro.model.Usuario;
+import com.listaVip.cadastro.auth.JWTTokenService;
+import com.listaVip.cadastro.auth.config.SecurityConfig;
+import com.listaVip.cadastro.usuario.entity.Usuario;
+import com.listaVip.cadastro.usuario.UsuarioRepository;
+import com.listaVip.cadastro.auth.UserDetailsImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 import java.util.Arrays;
 

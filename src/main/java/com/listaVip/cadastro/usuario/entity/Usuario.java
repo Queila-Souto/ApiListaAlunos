@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.model;
+package com.listaVip.cadastro.usuario.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

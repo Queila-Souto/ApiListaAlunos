@@ -1,6 +1,6 @@
-package com.listaVip.cadastro.repository;
+package com.listaVip.cadastro.auth;
 
-import com.listaVip.cadastro.model.Usuario;
+import com.listaVip.cadastro.usuario.entity.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
 
-    private Usuario usuario;
+    private final Usuario usuario;
 
     public UserDetailsImpl(Usuario user) {
         this.usuario = user;
@@ -39,25 +39,5 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return usuario.getEmail();
     } // Retorna o nome de usuário do usuário que criamos anteriormente
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
 }

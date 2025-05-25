@@ -1,5 +1,5 @@
-package com.listaVip.cadastro.repository;
-import com.listaVip.cadastro.model.Aluno;
+package com.listaVip.cadastro.aluno;
+import com.listaVip.cadastro.aluno.entity.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AlunoRepository extends JpaRepository<Aluno, Long> {}
