@@ -4,6 +4,7 @@ import com.listaVip.cadastro.auth.JWTTokenService;
 import com.listaVip.cadastro.usuario.dto.CriarUsuariosDto;
 import com.listaVip.cadastro.auth.dto.LoginUsuariosDto;
 import com.listaVip.cadastro.auth.dto.RecuperarJwtTokenDto;
+import com.listaVip.cadastro.usuario.entity.Papeis;
 import com.listaVip.cadastro.usuario.entity.Papel;
 import com.listaVip.cadastro.usuario.entity.Usuario;
 import com.listaVip.cadastro.auth.config.SecurityConfig;
@@ -55,7 +56,7 @@ public class UsuarioService {
                 // Codifica a senha do usuário com o algoritmo bcrypt
                 .senha(securityConfiguration.passwordEncoder().encode(createUserDto.password()))
                 // Atribui ao usuário uma permissão específica
-                .papeisList(List.of(Papel.builder().nome(createUserDto.role()).build()))
+                .papeisList(List.of(Papel.builder().nome(Papeis.PAPEL_CLIENTE).build()))
                 .build();
 
         // Salva o novo usuário no banco de dados

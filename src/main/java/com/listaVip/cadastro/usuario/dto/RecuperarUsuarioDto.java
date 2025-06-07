@@ -8,6 +8,7 @@ public record RecuperarUsuarioDto(
 
         Long id,
         String email,
+        String nome,
         List<Papeis> papeisList
 
 ) {
