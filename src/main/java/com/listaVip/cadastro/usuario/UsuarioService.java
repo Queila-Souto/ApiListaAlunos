@@ -52,7 +52,7 @@ public class UsuarioService {
 
     // Método responsável por criar um usuário
     public void createUser(CriarUsuariosDto createUserDto) {
-        Papel papel = papelRepository.findByNome(createUserDto.role())
+        Papel papel = papelRepository.findByNome(Papeis.PAPEL_CLIENTE)
                 .orElseThrow(() -> new RuntimeException("Papel 'PAPEL_CLIENTE' não encontrado no banco"));
 
         // Cria um novo usuário com os dados fornecidos
