@@ -29,6 +29,9 @@ public class UsuarioService {
     private UsuarioRepository userRepository;
 
     @Autowired
+    private PapelRepository papelRepository;
+
+    @Autowired
     private SecurityConfig securityConfiguration;
 
     // Método responsável por autenticar um usuário e retornar um token JWT
@@ -49,6 +52,8 @@ public class UsuarioService {
 
     // Método responsável por criar um usuário
     public void createUser(CriarUsuariosDto createUserDto) {
+        Papel papel = papelRepository.findByNome(createUserDto.role())
+                .orElseThrow(() -> new RuntimeException("Papel 'PAPEL_CLIENTE' não encontrado no banco"));
 
         // Cria um novo usuário com os dados fornecidos
         Usuario newUser = Usuario.builder()
@@ -56,7 +61,7 @@ public class UsuarioService {
                 // Codifica a senha do usuário com o algoritmo bcrypt
                 .senha(securityConfiguration.passwordEncoder().encode(createUserDto.password()))
                 // Atribui ao usuário uma permissão específica
-                .papeisList(List.of(Papel.builder().nome(Papeis.PAPEL_CLIENTE).build()))
+                .papeisList(List.of(papel))
                 .build();
 
         // Salva o novo usuário no banco de dados

@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
         private Long id;
 
         @Enumerated(EnumType.STRING)
+        @Column(unique = true, nullable = false)
         private Papeis nome;
 
     }

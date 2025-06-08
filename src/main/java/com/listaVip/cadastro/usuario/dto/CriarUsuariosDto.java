@@ -6,7 +6,8 @@ public record CriarUsuariosDto(
 
         String nome,
         String email,
-        String password
+        String password,
+        Papeis role
 
 ) {
 }
