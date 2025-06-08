@@ -57,6 +57,7 @@ public class UsuarioService {
 
         // Cria um novo usuário com os dados fornecidos
         Usuario newUser = Usuario.builder()
+                .nome(createUserDto.nome())
                 .email(createUserDto.email())
                 // Codifica a senha do usuário com o algoritmo bcrypt
                 .senha(securityConfiguration.passwordEncoder().encode(createUserDto.password()))
