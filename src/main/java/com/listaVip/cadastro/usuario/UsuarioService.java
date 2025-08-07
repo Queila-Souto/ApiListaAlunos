@@ -60,7 +60,7 @@ public class UsuarioService {
                 .nome(createUserDto.nome())
                 .email(createUserDto.email())
                 // Codifica a senha do usuário com o algoritmo bcrypt
-                .senha(securityConfiguration.passwordEncoder().encode(createUserDto.password()))
+                .senha(securityConfiguration.passwordEncoder().encode(createUserDto.senha()))
                 // Atribui ao usuário uma permissão específica
                 .papeisList(List.of(papel))
                 .build();
