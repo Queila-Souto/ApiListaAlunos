@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
             return new ResponseEntity<>(token, HttpStatus.OK);
         }
 
-        @PostMapping
+        @PostMapping("/cadastro")
         public ResponseEntity<Void> createUser(@RequestBody CriarUsuariosDto createUserDto) {
             userService.createUser(createUserDto);
             return new ResponseEntity<>(HttpStatus.CREATED);
