@@ -1,6 +1,7 @@
 package com.listaVip.cadastro.usuario;
 
 import com.listaVip.cadastro.auth.JWTTokenService;
+import com.listaVip.cadastro.auth.dto.RespostaAutenticacao;
 import com.listaVip.cadastro.usuario.dto.CriarUsuariosDto;
 import com.listaVip.cadastro.auth.dto.LoginUsuariosDto;
 import com.listaVip.cadastro.auth.dto.RecuperarJwtTokenDto;
@@ -35,20 +36,25 @@ public class UsuarioService {
     private SecurityConfig securityConfiguration;
 
     // Método responsável por autenticar um usuário e retornar um token JWT
-    public RecuperarJwtTokenDto authenticateUser(LoginUsuariosDto loginUserDto) {
-        // Cria um objeto de autenticação com o email e a senha do usuário
+    public RespostaAutenticacao authenticateUser(LoginUsuariosDto loginUserDto) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
 
-        // Autentica o usuário com as credenciais fornecidas
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        // Obtém o objeto UserDetails do usuário autenticado
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        // Gera um token JWT para o usuário autenticado
-        return new RecuperarJwtTokenDto(jwtTokenService.generateToken(userDetails));
+        // Gera o token JWT
+        String token = jwtTokenService.generateToken(userDetails);
+
+        // Busca o usuário completo no banco para pegar nome e email
+        Usuario usuario = userRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        // Retorna token + dados do usuário
+        return new RespostaAutenticacao(token, usuario.getNome(), usuario.getEmail());
     }
+
 
     // Método responsável por criar um usuário
     public void createUser(CriarUsuariosDto createUserDto) {
@@ -67,6 +73,16 @@ public class UsuarioService {
 
         // Salva o novo usuário no banco de dados
         userRepository.save(newUser);
+    }
+
+    public Usuario findOrCreateByGoogle(String email, String name) {
+        return userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    Usuario user = new Usuario();
+                    user.setEmail(email);
+                    user.setNome(name);
+                    return userRepository.save(user);
+                });
     }
 }
 
