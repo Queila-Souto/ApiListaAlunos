@@ -15,6 +15,9 @@ public class Aluno {
     private String curso;
     private String telefone;
     public Aluno(){}
+    public Long getId() {
+        return id;
+    }
     public String getSobrenome() {
         return sobrenome;
     }
@@ -42,6 +45,7 @@ public class Aluno {
     @Override
     public String toString() {
         return "Pessoa{" +
+                "Id='" + id + '\'' +
                 "primeiroNome='" + primeiroNome + '\'' +
                 ", sobrenome='" + sobrenome + '\'' +
                 ", curso='" + curso + '\'' +

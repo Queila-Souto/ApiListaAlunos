@@ -21,6 +21,26 @@ public class Usuario {
         return nome;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setPapeisList(List<Papel> papeisList) {
+        this.papeisList = papeisList;
+    }
+
     public String getEmail() {
         return email;
     }
