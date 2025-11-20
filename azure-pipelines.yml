@@ -4,34 +4,26 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  javaVersion: '17'
-  artifactName: 'api.jar'
-
 steps:
-
-  # 1) Instalar Java 17
-  - task: UseJavaVersion@1
-    inputs:
-      versionSpec: '17'
-      architecture: 'x64'
-
-  # 2) Build com Maven
-  - task: Maven@4
+  - task: Maven@3
     inputs:
       mavenPomFile: 'pom.xml'
-      goals: 'clean package'
-      publishJUnitResults: false
+      goals: 'package'
+      publishJUnitResults: true
 
-  # 3) Copiar JAR criado para a pasta de artefatos
   - task: CopyFiles@2
     inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)/target'
-      Contents: '*.jar'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      contents: '**/target/*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
 
-  # 4) Publicar artefato para o Release
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'drop'
+
+  # Deploy to Azure App Service
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'ConnectApiListaAlunos'
+      appName: 'ApiListaAlunos'
+      package: '$(Build.ArtifactStagingDirectory)/**/*.jar'
