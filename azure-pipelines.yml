@@ -25,5 +25,5 @@ steps:
   - task: AzureWebApp@1
     inputs:
       azureSubscription: 'ConnectApiListaAlunos'
-      appName: 'APIListaAlunos'
+      appName: 'ApiListaAlunos'
       package: '$(Build.ArtifactStagingDirectory)/**/*.jar'
