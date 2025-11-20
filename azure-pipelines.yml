@@ -24,6 +24,6 @@ steps:
   # Deploy to Azure App Service
   - task: AzureWebApp@1
     inputs:
-      azureSubscription: 'Azure subscription 1'
+      azureSubscription: 'ConnectApiListaAlunos'
       appName: 'APIListaAlunos'
       package: '$(Build.ArtifactStagingDirectory)/**/*.jar'
