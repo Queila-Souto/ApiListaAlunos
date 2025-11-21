@@ -57,23 +57,25 @@ public class UsuarioService {
 
 
     // Método responsável por criar um usuário
-    public void createUser(CriarUsuariosDto createUserDto) {
-        Papel papel = papelRepository.findByNome(Papeis.PAPEL_CLIENTE)
-                .orElseThrow(() -> new RuntimeException("Papel 'PAPEL_CLIENTE' não encontrado no banco"));
+    public void createUser(CriarUsuariosDto dto) {
 
-        // Cria um novo usuário com os dados fornecidos
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new RuntimeException("EMAIL_DUPLICADO");
+        }
+
+        Papel papel = papelRepository.findByNome(Papeis.PAPEL_CLIENTE)
+                .orElseThrow(() -> new RuntimeException("Papel 'PAPEL_CLIENTE' não encontrado"));
+
         Usuario newUser = Usuario.builder()
-                .nome(createUserDto.nome())
-                .email(createUserDto.email())
-                // Codifica a senha do usuário com o algoritmo bcrypt
-                .senha(securityConfiguration.passwordEncoder().encode(createUserDto.senha()))
-                // Atribui ao usuário uma permissão específica
+                .nome(dto.nome())
+                .email(dto.email())
+                .senha(securityConfiguration.passwordEncoder().encode(dto.senha()))
                 .papeisList(List.of(papel))
                 .build();
 
-        // Salva o novo usuário no banco de dados
         userRepository.save(newUser);
     }
+
 
     public Usuario findOrCreateByGoogle(String email, String name) {
         return userRepository.findByEmail(email)
