@@ -1,8 +1,10 @@
-package com.listaVip.cadastro.auth;
+package com.listaVip.cadastro.auth.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.listaVip.cadastro.usuario.UsuarioService;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
+import com.listaVip.cadastro.security.jwt.JWTTokenService;
+import com.listaVip.cadastro.usuario.service.UsuarioService;
 import com.listaVip.cadastro.usuario.entity.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

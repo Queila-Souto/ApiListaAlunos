@@ -1,9 +1,11 @@
-package com.listaVip.cadastro.usuario;
+package com.listaVip.cadastro.bootstrap;
 
-import com.listaVip.cadastro.auth.config.SecurityConfig;
+import com.listaVip.cadastro.config.SecurityConfig;
 import com.listaVip.cadastro.usuario.entity.Papeis;
 import com.listaVip.cadastro.usuario.entity.Papel;
 import com.listaVip.cadastro.usuario.entity.Usuario;
+import com.listaVip.cadastro.usuario.repository.PapelRepository;
+import com.listaVip.cadastro.usuario.repository.UsuarioRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

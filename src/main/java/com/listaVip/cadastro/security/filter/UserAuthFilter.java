@@ -1,9 +1,9 @@
-package com.listaVip.cadastro.auth.filter;
+package com.listaVip.cadastro.security.filter;
 
-import com.listaVip.cadastro.auth.JWTTokenService;
-import com.listaVip.cadastro.auth.UserDetailsImpl;
-import com.listaVip.cadastro.auth.config.SecurityConfig;
-import com.listaVip.cadastro.usuario.UsuarioRepository;
+import com.listaVip.cadastro.security.jwt.JWTTokenService;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
+import com.listaVip.cadastro.config.SecurityConfig;
+import com.listaVip.cadastro.usuario.repository.UsuarioRepository;
 import com.listaVip.cadastro.usuario.entity.Usuario;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

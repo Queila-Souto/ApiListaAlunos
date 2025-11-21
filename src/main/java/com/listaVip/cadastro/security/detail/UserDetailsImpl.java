@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.auth;
+package com.listaVip.cadastro.security.detail;
 
 import com.listaVip.cadastro.usuario.entity.Usuario;
 import org.springframework.security.core.GrantedAuthority;

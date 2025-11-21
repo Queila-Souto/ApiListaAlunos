@@ -1,9 +1,10 @@
-package com.listaVip.cadastro.auth;
+package com.listaVip.cadastro.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.ZoneId;

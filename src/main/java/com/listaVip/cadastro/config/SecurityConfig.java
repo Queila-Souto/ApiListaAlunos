@@ -1,6 +1,6 @@
-package com.listaVip.cadastro.auth.config;
+package com.listaVip.cadastro.config;
 
-import com.listaVip.cadastro.auth.filter.UserAuthFilter;
+import com.listaVip.cadastro.security.filter.UserAuthFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

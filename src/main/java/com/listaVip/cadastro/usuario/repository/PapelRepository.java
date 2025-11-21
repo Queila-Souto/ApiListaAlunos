@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.usuario;
+package com.listaVip.cadastro.usuario.repository;
 
 import com.listaVip.cadastro.usuario.entity.Papeis;
 import com.listaVip.cadastro.usuario.entity.Papel;

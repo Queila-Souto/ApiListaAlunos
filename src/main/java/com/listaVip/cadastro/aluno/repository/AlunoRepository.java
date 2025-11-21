@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.aluno;
+package com.listaVip.cadastro.aluno.repository;
 import com.listaVip.cadastro.aluno.entity.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 

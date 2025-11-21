@@ -1,4 +1,4 @@
-package com.listaVip.cadastro.usuario;
+package com.listaVip.cadastro.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

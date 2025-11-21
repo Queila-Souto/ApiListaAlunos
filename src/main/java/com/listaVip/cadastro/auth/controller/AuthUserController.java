@@ -1,10 +1,13 @@
-package com.listaVip.cadastro.auth;
+package com.listaVip.cadastro.auth.controller;
 
 import com.listaVip.cadastro.auth.dto.LoginUsuariosDto;
 import com.listaVip.cadastro.auth.dto.RecuperarJwtTokenDto;
 import com.listaVip.cadastro.auth.dto.RespostaAutenticacao;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
+import com.listaVip.cadastro.security.google.GoogleTokenVerifier;
+import com.listaVip.cadastro.security.jwt.JWTTokenService;
 import com.listaVip.cadastro.usuario.dto.CriarUsuariosDto;
-import com.listaVip.cadastro.usuario.UsuarioService;
+import com.listaVip.cadastro.usuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
