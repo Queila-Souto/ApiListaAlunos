@@ -2,21 +2,23 @@ package com.listaVip.cadastro.security.filter;
 
 import com.listaVip.cadastro.security.jwt.JWTTokenService;
 import com.listaVip.cadastro.security.detail.UserDetailsImpl;
-import com.listaVip.cadastro.config.SecurityConfig;
 import com.listaVip.cadastro.usuario.repository.UsuarioRepository;
 import com.listaVip.cadastro.usuario.entity.Usuario;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 public class UserAuthFilter extends OncePerRequestFilter {
@@ -27,21 +29,42 @@ public class UserAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    // 🔥 MATCHERS QUE SEMPRE FUNCIONAM
+    private static final AntPathRequestMatcher[] PUBLIC_MATCHERS = {
+
+            // Auth
+            new AntPathRequestMatcher("/usuario/login"),
+            new AntPathRequestMatcher("/usuario/cadastro"),
+            new AntPathRequestMatcher("/auth/google"),
+
+            // Swagger
+            new AntPathRequestMatcher("/v3/api-docs"),
+            new AntPathRequestMatcher("/v3/api-docs/**"),
+            new AntPathRequestMatcher("/swagger-ui.html"),
+            new AntPathRequestMatcher("/swagger-ui/**"),
+            new AntPathRequestMatcher("/swagger-resources"),
+            new AntPathRequestMatcher("/swagger-resources/**"),
+            new AntPathRequestMatcher("/webjars/**")
+    };
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String uri = request.getRequestURI();
+        System.out.println("🔎 URI recebida no filtro: " + uri);
+
+        // 🟢 Se o endpoint é público → pula o filtro
+        if (isPublic(request)) {
+            System.out.println("✔ Liberado sem autenticação");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
-            // Se for endpoint público, apenas prossiga
-            if (!requiresAuthentication(request)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
             String token = extractToken(request);
-
             if (token == null) {
                 sendError(response, 401, "Token ausente.");
                 return;
@@ -62,29 +85,22 @@ public class UserAuthFilter extends OncePerRequestFilter {
                     );
 
             SecurityContextHolder.getContext().setAuthentication(auth);
-
             filterChain.doFilter(request, response);
 
         } catch (RuntimeException e) {
 
-            if (e.getMessage() != null) {
-
-                // Token inválido/expirado
-                if (e.getMessage().contains("JWT") || e.getMessage().contains("token")) {
-                    sendError(response, 401, "Token inválido ou expirado.");
-                    return;
-                }
-            }
-
-            // Erro inesperado dentro do filtro → 401
-            sendError(response, 401, "Não autorizado.");
+            sendError(response, 401, "Token inválido ou expirado.");
         }
     }
 
-    private boolean requiresAuthentication(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        return !Arrays.asList(SecurityConfig.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED)
-                .contains(uri);
+    private boolean isPublic(HttpServletRequest request) {
+        for (AntPathRequestMatcher matcher : PUBLIC_MATCHERS) {
+            if (matcher.matches(request)) {
+                System.out.println("✔ Liberado por PUBLIC_MATCHERS: " + matcher.getPattern());
+                return true;
+            }
+        }
+        return false;
     }
 
     private String extractToken(HttpServletRequest request) {
@@ -101,9 +117,9 @@ public class UserAuthFilter extends OncePerRequestFilter {
         response.setStatus(status);
         response.setContentType("application/json");
         response.getWriter().write("""
-            {
-              "erro": "%s"
-            }
-        """.formatted(message));
+                {
+                  "erro": "%s"
+                }
+                """.formatted(message));
     }
 }

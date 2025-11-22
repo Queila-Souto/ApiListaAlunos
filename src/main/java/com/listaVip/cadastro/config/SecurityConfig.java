@@ -1,15 +1,15 @@
 package com.listaVip.cadastro.config;
 
 import com.listaVip.cadastro.security.filter.UserAuthFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,52 +18,64 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@ComponentScan(basePackages = "com.listaVip.cadastro")
 @EnableWebSecurity
+@SecurityScheme(
+        name = SecurityConfig.SECURITY,
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
 public class SecurityConfig {
-    private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/usuario/login", //url que usaremos para fazer login
-            "/usuario/cadastro",//url que usaremos para criar um usuário
-            "/auth/google"//url que usaremos para logar no google
-    };
-    // Endpoints que requerem autenticação para serem acessados
-    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/alunos/cadastro",
-            "/alunos/lista",
-            "/alunos/remover/{id}"
-    };
+    public static final String SECURITY = "bearerAuth";
 
-    // Endpoints que só podem ser acessador por usuários com permissão de cliente
-    public static final String[] ENDPOINTS_CUSTOMER = {
-
-    };
-
-    // Endpoints que só podem ser acessador por usuários com permissão de administrador
-    public static final String[] ENDPOINTS_ADMIN = {
-
+    // Se quiser adicionar mais endpoints públicos no futuro → adicionar aqui
+    public static final String[] PUBLIC_ENDPOINTS = {
+            "/usuario/login",
+            "/usuario/cadastro",
+            "/auth/google"
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, UserAuthFilter userAuthFilter) throws Exception {
-        return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                            .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
-                            .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                            .requestMatchers(ENDPOINTS_CUSTOMER).hasRole("CUSTOMER")
-                            .anyRequest().denyAll();
-                })
-                .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   UserAuthFilter userAuthFilter)
+            throws Exception {
+
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+
+                        // ✔ Swagger liberado
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
+                        // ✔ Endpoints públicos da API
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+
+                        // 🔒 Qualquer outro endpoint precisa de autenticação
+                        .anyRequest().authenticated()
+                )
+
+                // 🔵 Filtro JWT antes do UsernamePasswordAuthenticationFilter
+                .addFilterBefore(userAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
