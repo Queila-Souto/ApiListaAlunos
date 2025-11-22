@@ -1,8 +1,4 @@
 package com.listaVip.cadastro.auth.dto;
 
-public record RecuperarJwtTokenDto(
-
-        String token
-
-) {
+public record RecuperarJwtTokenDto(String token) {
 }

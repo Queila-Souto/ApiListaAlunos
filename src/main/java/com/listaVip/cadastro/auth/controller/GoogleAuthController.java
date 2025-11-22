@@ -2,9 +2,9 @@ package com.listaVip.cadastro.auth.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.listaVip.cadastro.auth.service.AuthService;
 import com.listaVip.cadastro.security.detail.UserDetailsImpl;
 import com.listaVip.cadastro.security.jwt.JWTTokenService;
-import com.listaVip.cadastro.usuario.service.UsuarioService;
 import com.listaVip.cadastro.usuario.entity.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class GoogleAuthController {
 
     private final GoogleIdTokenVerifier verifier;
-    private final UsuarioService usuarioService;
+    private final AuthService authService;
     private final JWTTokenService jwtTokenService;
 
     @PostMapping("/google")
@@ -40,7 +40,7 @@ public class GoogleAuthController {
             String name = (String) payload.get("name");
 
             // Cria ou busca o usuário
-            Usuario usuario = usuarioService.findOrCreateByGoogle(email, name );
+            Usuario usuario = authService.findOrCreateByGoogle(email, name );
 
             // 🔹 2. Cria UserDetailsImpl “na mão”
             UserDetailsImpl userDetails = new UserDetailsImpl(usuario);
