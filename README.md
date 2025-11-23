@@ -1,157 +1,164 @@
-# 🛡️ API de Autenticação e Controle de Acesso
+# 📘 ListaVip Cadastro API
 
-API desenvolvida em **Java**, utilizando **Spring Boot** e **Spring
-Security**, responsável pela autenticação, autorização e gerenciamento
-de usuários, perfis e permissões para aplicações clientes.
+![Java](https://img.shields.io/badge/Java-17-007396?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?logo=springboot&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-3.9+-C71A36?logo=apachemaven&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-JWT-6DB33F?logo=springsecurity&logoColor=white)
+![Google Sign-In](https://img.shields.io/badge/Google%20Sign--In-OAuth2-4285F4?logo=google&logoColor=white)
+![OpenAPI](https://img.shields.io/badge/OpenAPI%203-Swagger-85EA2D?logo=swagger&logoColor=black)
 
-## 📌 Funcionalidades
+---
 
--   Registro, autenticação e gerenciamento de usuários
--   Autenticação baseada em **JWT (JSON Web Token)**
--   Controle de acessos baseado em **roles** e **permissões**
--   Endpoints protegidos com filtros de segurança
--   Renovação de tokens (opcional)
--   Middleware para validação automática de tokens
--   Suporte a CORS configurável
--   Estrutura preparada para integração com serviços externos
+## 🚀 Como rodar o projeto
 
-## 🏗️ Tecnologias Utilizadas
+### **Pré-requisitos**
+- Java **17+**
+- Maven **3.9+**
+- Uma IDE (IntelliJ, Eclipse, VSCode) – *opcional*
 
--   **Java 17+**
--   **Spring Boot (Web, Security, Validation)**
--   **Spring Data JPA / Hibernate**
--   **JWT (io.jsonwebtoken / Auth0)**
--   **Banco de Dados**: PostgreSQL / MySQL / H2
--   **Maven/Gradle**
--   **Lombok**
+---
 
-## 📁 Estrutura do Projeto (exemplo)
-
-    src/
-     └── main/
-          ├── java/
-          │    └── com.seuprojeto
-          │          ├── controller/
-          │          ├── service/
-          │          ├── repository/
-          │          ├── security/
-          │          │      ├── config/
-          │          │      ├── filters/
-          │          │      ├── jwt/
-          │          └── model/
-          └── resources/
-               ├── application.properties
-               └── schema.sql / data.sql
-
-## ▶️ Como Executar o Projeto
-
-### 1. Clonar o repositório
-
-``` bash
-git clone https://github.com/seu-usuario/seu-repo.git
-cd seu-repo
+### **1. Clone o repositório**
+```bash
+git clone https://github.com/seu-repositorio/listavip-cadastro-api.git
+cd listavip-cadastro-api
 ```
 
-### 2. Configurar variáveis de ambiente
-
-No arquivo `application.properties`:
-
-``` properties
-server.port=8080
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/minha_api
-spring.datasource.username=usuario
-spring.datasource.password=senha
-
-jwt.secret=minha_chave_secreta_super_segura
-jwt.expiration=3600000
+### **2. Instale as dependências**
+```bash
+mvn clean install
 ```
 
-### 3. Executar o projeto
-
-``` bash
-./mvnw spring-boot:run
-```
-
-ou
-
-``` bash
+### **3. Execute o projeto**
+```bash
 mvn spring-boot:run
 ```
 
-## 🔑 Autenticação
-
-### Fluxo de Login
-
-1.  O cliente envia e-mail e senha para o endpoint:
-
-``` http
-POST /auth/login
+### **4. Acesse o Swagger**
+```
+http://localhost:8080/swagger-ui/index.html
 ```
 
-2.  A API retorna:
+---
 
-``` json
+# 📚 Sobre o projeto
+
+**ListaVip Cadastro API** é um projeto **de estudo**, desenvolvido para aprofundar conhecimentos em:
+
+- Autenticação e autorização com **Spring Security**
+- Geração e validação de **JWT**
+- Login social com **Google Sign-In**
+- Arquitetura em camadas
+- Documentação com **Swagger/OpenAPI**
+- Criação de filtros e handlers globais
+- Boas práticas REST
+
+---
+
+# 🏗️ Arquitetura
+
+| Camada | Descrição |
+|-------|-----------|
+| Controller | Endpoints REST |
+| Service | Regras de negócio |
+| Repository | Persistência com Spring Data JPA |
+| Security | JWT, filtros e Google OAuth |
+| DTOs | Objetos de transferência |
+| Entities | Modelos JPA |
+
+---
+
+# 🔐 Autenticação
+
+## 1. Login padrão
+```
+POST /usuario/login
+```
+Retorna um token JWT.
+
+## 2. Google Sign-In
+```
+POST /auth/google
+```
+Fluxo:
+1. Front coleta idToken do Google  
+2. API valida  
+3. Usuário é criado/recuperado  
+4. JWT da aplicação é retornado  
+
+---
+
+# 🎓 CRUD de Alunos
+
+Prefixo:
+```
+/alunos
+```
+
+Endpoints:
+- Criar
+- Listar
+- Buscar por ID
+- Atualizar
+- Remover
+
+---
+
+# 🔒 Segurança (JWT)
+
+- Endpoints públicos:
+```
+/usuario/login
+/usuario/cadastro
+/auth/google
+```
+
+- Swagger liberado  
+- JWT Filter configurado  
+- Sessão Stateless  
+
+---
+
+# 🧪 Exemplo de uso
+
+### Login
+```json
 {
-  "accessToken": "jwt_token_aqui",
-  "expiresIn": 3600,
-  "tokenType": "Bearer"
+  "login": "email@example.com",
+  "senha": "123456"
 }
 ```
 
-3.  Usar o token para acessar endpoints protegidos:
-
-``` http
-Authorization: Bearer <token>
+Retorno:
+```json
+{
+  "token": "jwt-gerado..."
+}
 ```
 
-## 🔐 Endpoints Principais
+---
 
-### Autenticação
+# 📁 Estrutura do projeto
 
-  Método   Endpoint           Descrição
-  -------- ------------------ --------------------------
-  POST     `/auth/register`   Registrar novo usuário
-  POST     `/auth/login`      Autenticar usuário
-  POST     `/auth/refresh`    Renovar token (opcional)
-
-### Usuários
-
-  Método   Endpoint        Descrição
-  -------- --------------- -------------------------
-  GET      `/users`        Listar usuários (ADMIN)
-  GET      `/users/{id}`   Buscar usuário
-  PUT      `/users/{id}`   Atualizar dados
-  DELETE   `/users/{id}`   Remover usuário
-
-## 🔒 Configuração de Segurança
-
-Exemplo (simplificado):
-
-``` java
-http
-    .csrf().disable()
-    .authorizeHttpRequests(auth -> {
-        auth.requestMatchers("/auth/**").permitAll();
-        auth.anyRequest().authenticated();
-    })
-    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+```
+src/main/java/com/listaVip/cadastro
+ ├── aluno
+ ├── auth
+ ├── security
+ ├── usuario
+ ├── config
+ └── exception
 ```
 
-## 🧪 Testes
+---
 
-``` bash
-mvn test
-```
+# 📝 Considerações finais
 
-## 🐳 Docker (opcional)
+Este projeto continua evoluindo e pode ganhar futuramente:
 
-``` bash
-docker build -t minha-api-auth .
-docker run -p 8080:8080 minha-api-auth
-```
+- Refresh Token  
+- Permissões avançadas  
+- Testes unitários e integrados  
+- Deploy em nuvem  
+- Migrações com Flyway  
 
-## 📄 Licença
-
-Projeto sob licença **MIT**.
