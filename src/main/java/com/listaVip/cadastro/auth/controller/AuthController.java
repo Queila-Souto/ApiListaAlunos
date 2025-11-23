@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Controlador responsável pelos endpoints de autenticação de usuários.
+ * Controlador responsável pelos endpoints de autenticação de usuários de forma padrão, ou seja, utilizando login e senha.
  * <p>
  * Esta classe gerencia operações relacionadas ao processo de login,
  * incluindo validação das credenciais fornecidas e delegação para o serviço
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/usuario")
 @Tag(
-        name = "Autenticação",
+        name = "Autenticação Padrão",
         description = "Endpoints para autenticação de usuários"
 )
 public class AuthController {
@@ -41,8 +41,8 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(
-            summary = "Autenticar usuário",
-            description = "Realiza a autenticação de um usuário com login e senha. "
+            summary = "Autenticar usuário - Autenticação Padrão",
+            description = "Realiza a autenticação padrão de um usuário com login e senha. "
                     + "Retorna um token JWT em caso de sucesso.",
             responses = {
                     @ApiResponse(
