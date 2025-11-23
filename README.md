@@ -9,6 +9,41 @@
 
 ---
 
+# 📚 Sobre o projeto
+
+**ListaVip Cadastro API** é um projeto **de estudo**, desenvolvido para aprofundar conhecimentos em:
+
+- Autenticação e autorização com **Spring Security**
+- Geração e validação de **JWT**
+- Login social com **Google Sign-In**
+- Arquitetura em camadas
+- Documentação com **Swagger/OpenAPI**
+- Criação de filtros e handlers globais
+- Boas práticas REST
+
+---
+
+# 🎯 Visão do Produto
+
+A ListaVip Cadastro API foi criada com o objetivo de oferecer uma plataforma simples, segura e escalável para o gerenciamento de alunos que farão parte de uma lista VIP exclusiva.
+A aplicação permite que escolas, cursos, eventos ou instituições mantenham um controle estruturado de seus participantes mais importantes, garantindo que cada aluno seja registrado, atualizado e autenticado de forma confiável.
+
+Além do cadastro tradicional, o sistema também integra mecanismos modernos de autenticação, como login via Google e autenticação JWT, refletindo práticas amplamente utilizadas em sistemas reais.
+
+O foco do produto é proporcionar:
+
+✔ Gestão prática de alunos
+
+✔ Segurança robusta baseada em tokens JWT
+
+✔ Experiência de login moderna, incluindo Google Sign-In
+
+✔ Arquitetura limpa, seguindo boas práticas de API REST
+
+Embora seja um projeto de estudo, ele foi estruturado com qualidade e visão prática, permitindo que futuras funcionalidades sejam facilmente incorporadas — como envio de notificações, presença digital, ranking de alunos VIP, entre outras evoluções possíveis.
+
+---
+
 ## 🚀 Como rodar o projeto
 
 ### **Pré-requisitos**
@@ -38,20 +73,6 @@ mvn spring-boot:run
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
-
----
-
-# 📚 Sobre o projeto
-
-**ListaVip Cadastro API** é um projeto **de estudo**, desenvolvido para aprofundar conhecimentos em:
-
-- Autenticação e autorização com **Spring Security**
-- Geração e validação de **JWT**
-- Login social com **Google Sign-In**
-- Arquitetura em camadas
-- Documentação com **Swagger/OpenAPI**
-- Criação de filtros e handlers globais
-- Boas práticas REST
 
 ---
 
