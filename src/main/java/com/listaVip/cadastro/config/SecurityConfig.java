@@ -19,15 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@SecurityScheme(
-        name = SecurityConfig.SECURITY,
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        scheme = "bearer"
-)
-public class SecurityConfig {
 
-    public static final String SECURITY = "bearerAuth";
+public class SecurityConfig {
 
     // Se quiser adicionar mais endpoints públicos no futuro → adicionar aqui
     public static final String[] PUBLIC_ENDPOINTS = {

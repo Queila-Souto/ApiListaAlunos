@@ -30,7 +30,6 @@ import java.util.List;
  * Todos os métodos retornam respostas padronizadas utilizando {@link ResponseEntity}.
  */
 @Tag(name = "Alunos", description = "Endpoints responsáveis pelo gerenciamento de alunos")
-@SecurityRequirement(name = SecurityConfig.SECURITY)
 @RestController
 
 @RequestMapping("/alunos")
