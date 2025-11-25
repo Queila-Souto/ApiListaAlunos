@@ -36,8 +36,23 @@ public class AlunoService {
 
     @Transactional(readOnly = true)
     public List<Aluno> findAll() {
-        return alunoRepository.findAll();
+        //TODO
+        /**VERIFICAR O PAPEL DO USUÁRIO
+         * SE, DIFERENTE DE ADMIN -> RETORNA A LISTA FILTRADA (FINDALUNOBYUSER)
+         * SE NÃO, RETORNA A LISTA COMPLERTA (FIND ALL)*/
+        Boolean isAdmin = ((UserDetailsImpl) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal())
+                .isAdmin();
+        System.out.println("Usuário logado é admin? "+isAdmin);
+
+        if (isAdmin) {
+            return alunoRepository.findAll();
+        }
+        return findAlunoByUser();
     }
+
 
     @Transactional(readOnly = true)
     public List<Aluno> findAlunoByUser() {

@@ -66,11 +66,6 @@ public class AlunoController {
         return ResponseEntity.ok(alunoService.findAll());
     }
 
-    @GetMapping("/listafiltrada")
-    public ResponseEntity<List<Aluno>> listarAlunosPorUsuario() {
-        return ResponseEntity.ok(alunoService.findAlunoByUser());
-    }
-
     @Operation(
             summary = "Busca aluno por ID",
             description = "Retorna os dados de um aluno específico com base no ID informado."

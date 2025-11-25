@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
@@ -16,6 +17,15 @@ public class UserDetailsImpl implements UserDetails {
     }
     public Long getId() {
         return usuario.getId();
+    }
+    private Collection<Object> getPapeisList() {
+        return Collections.singleton(usuario.getPapeisList());
+    }
+
+    public boolean isAdmin() {
+        return getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(auth -> auth.equals("PAPEL_ADMIN") || auth.equals("ADMIN"));
     }
 
     @Override
@@ -32,6 +42,8 @@ public class UserDetailsImpl implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getNome().name()))
                 .collect(Collectors.toList());
     }
+
+
 
     @Override
     public String getPassword() {
