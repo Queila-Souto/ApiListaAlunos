@@ -26,6 +26,7 @@ public class JWTTokenService {
                     .withIssuedAt(creationDate()) // Define a data de emissão do token
                     .withExpiresAt(expirationDate()) // Define a data de expiração do token
                     .withSubject(user.getUsername()) // Define o assunto do token (neste caso, o nome de usuário)
+                    .withClaim("userId", user.getId())
                     .sign(algorithm); // Assina o token usando o algoritmo especificado
         } catch (JWTCreationException exception) {
             throw new JWTCreationException("Erro ao gerar token.", exception);
@@ -52,6 +53,21 @@ public class JWTTokenService {
 
     private Instant expirationDate() {
         return ZonedDateTime.now(ZoneId.of("America/Recife")).plusHours(4).toInstant();
+    }
+
+    public Long getUserIdFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+
+            return JWT.require(algorithm)
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token)
+                    .getClaim("userId")
+                    .asLong();
+        } catch (JWTVerificationException exception) {
+            throw new JWTVerificationException("Token inválido ou expirado.");
+        }
     }
 
 }

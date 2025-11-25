@@ -14,6 +14,9 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(Usuario user) {
         this.usuario = user;
     }
+    public Long getId() {
+        return usuario.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -21,6 +21,9 @@ public class Aluno {
     private String curso;
     @Setter
     private String telefone;
+    @Setter
+    private Long usuario_id;
+
     public Aluno(){}
 
     @Override
@@ -31,6 +34,7 @@ public class Aluno {
                 ", sobrenome='" + sobrenome + '\'' +
                 ", curso='" + curso + '\'' +
                 ", telefone='" + telefone + '\'' +
+                ", responsável='"+usuario_id+'\''+
                 '}';
     }
 }
