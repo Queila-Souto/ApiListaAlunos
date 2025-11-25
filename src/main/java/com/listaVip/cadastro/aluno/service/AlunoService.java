@@ -2,14 +2,15 @@ package com.listaVip.cadastro.aluno.service;
 
 import com.listaVip.cadastro.aluno.entity.Aluno;
 import com.listaVip.cadastro.aluno.repository.AlunoRepository;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
 @Service
 public class AlunoService {
 
@@ -19,6 +20,13 @@ public class AlunoService {
         this.alunoRepository = alunoRepository;
     }
 
+    private UserDetailsImpl getLoggedUser() {
+        return (UserDetailsImpl) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
+
     @Transactional
     public Aluno create(Aluno aluno) {
         try {
@@ -26,29 +34,38 @@ public class AlunoService {
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(),
-                    ex
+                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(), ex
             );
         }
     }
 
     @Transactional(readOnly = true)
     public List<Aluno> findAll() {
-        return alunoRepository.findAll();
+
+        UserDetailsImpl user = getLoggedUser();
+
+        if (user.isAdmin()) {
+            return alunoRepository.findAll();
+        }
+
+        return alunoRepository.findByUsuarioId(user.getId());
     }
 
     @Transactional(readOnly = true)
     public Aluno findById(Long id) {
         return alunoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado com id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Aluno não encontrado com id: " + id
+                ));
     }
 
     @Transactional
     public Aluno update(Long id, Aluno aluno) {
+
         Aluno existing = alunoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado com id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Aluno não encontrado com id: " + id
+                ));
 
         existing.setPrimeiroNome(aluno.getPrimeiroNome());
         existing.setSobrenome(aluno.getSobrenome());
@@ -60,16 +77,14 @@ public class AlunoService {
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(),
-                    ex
+                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(), ex
             );
         }
     }
 
     @Transactional
     public void delete(Long id) {
-        boolean exists = alunoRepository.existsById(id);
-        if (!exists) {
+        if (!alunoRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Aluno não encontrado com id: " + id);
         }

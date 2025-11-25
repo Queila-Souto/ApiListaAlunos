@@ -3,11 +3,16 @@ package com.listaVip.cadastro.aluno.controller;
 import com.listaVip.cadastro.aluno.entity.Aluno;
 import com.listaVip.cadastro.aluno.service.AlunoService;
 import com.listaVip.cadastro.config.SecurityConfig;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
+import com.listaVip.cadastro.usuario.entity.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
@@ -46,7 +51,8 @@ public class AlunoController {
             description = "Recebe os dados de um aluno válido e o registra no sistema."
     )
     @PostMapping("/cadastro")
-    public ResponseEntity<Aluno> cadastrar(@RequestBody @Valid Aluno aluno) {
+    public ResponseEntity<Aluno> cadastrar(@RequestBody @Valid Aluno aluno, @AuthenticationPrincipal UserDetailsImpl usuario ) {
+        aluno.setUsuarioId(usuario.getId());
         Aluno salvo = alunoService.create(aluno);
         return ResponseEntity.created(URI.create("/alunos/" + salvo.getId())).body(salvo);
     }

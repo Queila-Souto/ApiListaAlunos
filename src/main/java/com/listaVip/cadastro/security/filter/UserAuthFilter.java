@@ -29,15 +29,11 @@ public class UserAuthFilter extends OncePerRequestFilter {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    // 🔥 MATCHERS QUE SEMPRE FUNCIONAM
-    private static final AntPathRequestMatcher[] PUBLIC_MATCHERS = {
 
-            // Auth
+    private static final AntPathRequestMatcher[] PUBLIC_MATCHERS = {
             new AntPathRequestMatcher("/usuario/login"),
             new AntPathRequestMatcher("/usuario/cadastro"),
             new AntPathRequestMatcher("/auth/google"),
-
-            // Swagger
             new AntPathRequestMatcher("/v3/api-docs"),
             new AntPathRequestMatcher("/v3/api-docs/**"),
             new AntPathRequestMatcher("/swagger-ui.html"),
@@ -53,12 +49,8 @@ public class UserAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String uri = request.getRequestURI();
-        System.out.println("🔎 URI recebida no filtro: " + uri);
-
-        // 🟢 Se o endpoint é público → pula o filtro
+        // Se a rota é pública, ignora o filtro
         if (isPublic(request)) {
-            System.out.println("✔ Liberado sem autenticação");
             filterChain.doFilter(request, response);
             return;
         }
@@ -70,10 +62,11 @@ public class UserAuthFilter extends OncePerRequestFilter {
                 return;
             }
 
-            String email = jwtTokenService.getSubjectFromToken(token);
+            // ⬅️ Agora pegamos o ID DO TOKEN
+            Long userId = jwtTokenService.getUserIdFromToken(token);
 
-            Usuario usuario = usuarioRepository.findByEmail(email)
-                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+            Usuario usuario = usuarioRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado pelo ID."));
 
             UserDetails userDetails = new UserDetailsImpl(usuario);
 
@@ -85,18 +78,18 @@ public class UserAuthFilter extends OncePerRequestFilter {
                     );
 
             SecurityContextHolder.getContext().setAuthentication(auth);
+
             filterChain.doFilter(request, response);
 
         } catch (RuntimeException e) {
-
             sendError(response, 401, "Token inválido ou expirado.");
         }
     }
 
+
     private boolean isPublic(HttpServletRequest request) {
         for (AntPathRequestMatcher matcher : PUBLIC_MATCHERS) {
             if (matcher.matches(request)) {
-                System.out.println("✔ Liberado por PUBLIC_MATCHERS: " + matcher.getPattern());
                 return true;
             }
         }
