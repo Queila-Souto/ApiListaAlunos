@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
 @Service
 public class AlunoService {
 
@@ -21,6 +20,13 @@ public class AlunoService {
         this.alunoRepository = alunoRepository;
     }
 
+    private UserDetailsImpl getLoggedUser() {
+        return (UserDetailsImpl) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+    }
+
     @Transactional
     public Aluno create(Aluno aluno) {
         try {
@@ -28,55 +34,38 @@ public class AlunoService {
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(),
-                    ex
+                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(), ex
             );
         }
     }
 
     @Transactional(readOnly = true)
     public List<Aluno> findAll() {
-        //TODO
-        /**VERIFICAR O PAPEL DO USUÁRIO
-         * SE, DIFERENTE DE ADMIN -> RETORNA A LISTA FILTRADA (FINDALUNOBYUSER)
-         * SE NÃO, RETORNA A LISTA COMPLERTA (FIND ALL)*/
-        Boolean isAdmin = ((UserDetailsImpl) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal())
-                .isAdmin();
-        System.out.println("Usuário logado é admin? "+isAdmin);
 
-        if (isAdmin) {
+        UserDetailsImpl user = getLoggedUser();
+
+        if (user.isAdmin()) {
             return alunoRepository.findAll();
         }
-        return findAlunoByUser();
-    }
 
-
-    @Transactional(readOnly = true)
-    public List<Aluno> findAlunoByUser() {
-        Long userId = ((UserDetailsImpl) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal())
-                .getId();
-
-        return alunoRepository.findByUsuarioId(userId);
+        return alunoRepository.findByUsuarioId(user.getId());
     }
 
     @Transactional(readOnly = true)
     public Aluno findById(Long id) {
         return alunoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado com id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Aluno não encontrado com id: " + id
+                ));
     }
 
     @Transactional
     public Aluno update(Long id, Aluno aluno) {
+
         Aluno existing = alunoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Aluno não encontrado com id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Aluno não encontrado com id: " + id
+                ));
 
         existing.setPrimeiroNome(aluno.getPrimeiroNome());
         existing.setSobrenome(aluno.getSobrenome());
@@ -88,16 +77,14 @@ public class AlunoService {
         } catch (DataIntegrityViolationException ex) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(),
-                    ex
+                    "Violação de integridade: " + ex.getMostSpecificCause().getMessage(), ex
             );
         }
     }
 
     @Transactional
     public void delete(Long id) {
-        boolean exists = alunoRepository.existsById(id);
-        if (!exists) {
+        if (!alunoRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Aluno não encontrado com id: " + id);
         }
