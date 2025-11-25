@@ -2,8 +2,10 @@ package com.listaVip.cadastro.aluno.service;
 
 import com.listaVip.cadastro.aluno.entity.Aluno;
 import com.listaVip.cadastro.aluno.repository.AlunoRepository;
+import com.listaVip.cadastro.security.detail.UserDetailsImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,6 +37,17 @@ public class AlunoService {
     @Transactional(readOnly = true)
     public List<Aluno> findAll() {
         return alunoRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Aluno> findAlunoByUser() {
+        Long userId = ((UserDetailsImpl) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal())
+                .getId();
+
+        return alunoRepository.findByUsuarioId(userId);
     }
 
     @Transactional(readOnly = true)

@@ -52,7 +52,7 @@ public class AlunoController {
     )
     @PostMapping("/cadastro")
     public ResponseEntity<Aluno> cadastrar(@RequestBody @Valid Aluno aluno, @AuthenticationPrincipal UserDetailsImpl usuario ) {
-        aluno.setUsuario_id(usuario.getId());
+        aluno.setUsuarioId(usuario.getId());
         Aluno salvo = alunoService.create(aluno);
         return ResponseEntity.created(URI.create("/alunos/" + salvo.getId())).body(salvo);
     }
@@ -64,6 +64,11 @@ public class AlunoController {
     @GetMapping("/lista")
     public ResponseEntity<List<Aluno>> listar() {
         return ResponseEntity.ok(alunoService.findAll());
+    }
+
+    @GetMapping("/listafiltrada")
+    public ResponseEntity<List<Aluno>> listarAlunosPorUsuario() {
+        return ResponseEntity.ok(alunoService.findAlunoByUser());
     }
 
     @Operation(

@@ -22,7 +22,7 @@ public class Aluno {
     @Setter
     private String telefone;
     @Setter
-    private Long usuario_id;
+    private Long usuarioId;
 
     public Aluno(){}
 
@@ -34,7 +34,7 @@ public class Aluno {
                 ", sobrenome='" + sobrenome + '\'' +
                 ", curso='" + curso + '\'' +
                 ", telefone='" + telefone + '\'' +
-                ", responsável='"+usuario_id+'\''+
+                ", responsável='"+usuarioId+'\''+
                 '}';
     }
 }
