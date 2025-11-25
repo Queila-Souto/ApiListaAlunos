@@ -49,8 +49,6 @@ public class UserAuthFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        System.out.println("🔎 URI no filtro: " + request.getRequestURI());
-
         // Se a rota é pública, ignora o filtro
         if (isPublic(request)) {
             filterChain.doFilter(request, response);
@@ -66,7 +64,6 @@ public class UserAuthFilter extends OncePerRequestFilter {
 
             // ⬅️ Agora pegamos o ID DO TOKEN
             Long userId = jwtTokenService.getUserIdFromToken(token);
-            System.out.println("🔑 userId extraído do token: " + userId);
 
             Usuario usuario = usuarioRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado pelo ID."));
@@ -85,7 +82,6 @@ public class UserAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (RuntimeException e) {
-            System.out.println("❌ Erro no filtro: " + e.getMessage());
             sendError(response, 401, "Token inválido ou expirado.");
         }
     }

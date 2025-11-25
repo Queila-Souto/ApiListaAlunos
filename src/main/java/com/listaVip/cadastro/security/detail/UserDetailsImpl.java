@@ -21,7 +21,6 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public boolean isAdmin() {
-        System.out.println("getAuthorities -> " + getAuthorities());
 
         return getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
